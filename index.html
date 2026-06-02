@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modeling &amp; Simulation — Exam Study Guide</title>
+<style>
+:root {
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #94a3b8;
+  --sidebar-hover: #334155;
+  --sidebar-active-bg: #3b82f6;
+  --sidebar-active-text: #ffffff;
+  --text: #1e293b;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #3b82f6;
+  --accent-bg: #eff6ff;
+  --code-bg: #f8fafc;
+  --code-border: #e2e8f0;
+  --tab-active: #3b82f6;
+  --tab-active-text: #fff;
+  --tag-bg: #dbeafe;
+  --tag-text: #1d4ed8;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+}
+[data-theme="dark"] {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --sidebar-bg: #0f172a;
+  --sidebar-text: #64748b;
+  --sidebar-hover: #1e293b;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --border: #334155;
+  --accent-bg: #1e3a5f;
+  --code-bg: #0f172a;
+  --code-border: #334155;
+  --tag-bg: #1e3a5f;
+  --tag-text: #93c5fd;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+/* Sidebar */
+.sidebar { width: 260px; min-height: 100vh; background: var(--sidebar-bg); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 100; }
+.sidebar-header { padding: 20px 16px 12px; border-bottom: 1px solid #334155; }
+.sidebar-header h1 { color: #f1f5f9; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.sidebar-header p { color: #64748b; font-size: 11px; margin-top: 3px; }
+.progress-wrap { padding: 12px 16px; border-bottom: 1px solid #334155; }
+.progress-label { display: flex; justify-content: space-between; color: #64748b; font-size: 11px; margin-bottom: 6px; }
+.progress-label span:last-child { color: var(--green); font-weight: 600; }
+.progress-bar { height: 4px; background: #334155; border-radius: 2px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.3s; }
+.nav-section { padding: 8px 0; }
+.nav-section-label { padding: 6px 16px 2px; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #475569; }
+.nav-item { display: flex; align-items: center; gap: 8px; padding: 7px 16px; cursor: pointer; text-decoration: none; color: var(--sidebar-text); font-size: 13px; transition: all 0.15s; border-left: 3px solid transparent; }
+.nav-item:hover { background: var(--sidebar-hover); color: #e2e8f0; }
+.nav-item.active { background: #1d4ed820; border-left-color: var(--accent); color: #93c5fd; }
+.nav-item .qnum { background: #334155; color: #94a3b8; font-size: 10px; font-weight: 700; padding: 1px 5px; border-radius: 3px; min-width: 22px; text-align: center; flex-shrink: 0; }
+.nav-item.active .qnum { background: var(--accent); color: white; }
+.nav-item .check { margin-left: auto; color: var(--green); font-size: 12px; opacity: 0; transition: opacity 0.2s; }
+.nav-item.done .check { opacity: 1; }
+.sidebar-footer { padding: 12px 16px; border-top: 1px solid #334155; margin-top: auto; }
+.theme-toggle { display: flex; align-items: center; gap: 8px; background: #334155; border: none; color: #94a3b8; padding: 7px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; width: 100%; }
+.theme-toggle:hover { background: #475569; color: #e2e8f0; }
+
+/* Main content */
+.main { margin-left: 260px; flex: 1; padding: 32px; max-width: calc(100vw - 260px); }
+.page-title { margin-bottom: 28px; }
+.page-title h2 { font-size: 22px; font-weight: 700; }
+.page-title p { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+/* Question sections */
+.q-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px; overflow: hidden; scroll-margin-top: 24px; }
+.q-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 14px; }
+.q-badge { background: var(--accent); color: white; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; margin-top: 3px; }
+.q-question { font-size: 15px; font-weight: 600; line-height: 1.4; flex: 1; }
+.q-question em { font-style: normal; color: var(--muted); font-size: 13px; font-weight: 400; display: block; margin-top: 4px; }
+.done-btn { margin-left: auto; background: none; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; white-space: nowrap; flex-shrink: 0; transition: all 0.2s; }
+.done-btn:hover { border-color: var(--green); color: var(--green); }
+.done-btn.marked { background: #dcfce7; border-color: var(--green); color: #16a34a; }
+[data-theme="dark"] .done-btn.marked { background: #14532d40; color: var(--green); }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); padding: 0 24px; background: var(--bg); }
+.tab-btn { padding: 10px 16px; border: none; background: none; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--muted); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.15s; }
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-panel { display: none; padding: 24px; }
+.tab-panel.active { display: block; }
+
+/* Content styles */
+.tab-panel h3 { font-size: 16px; font-weight: 700; margin: 24px 0 10px; color: var(--text); }
+.tab-panel h3:first-child { margin-top: 0; }
+.tab-panel h4 { font-size: 14px; font-weight: 700; margin: 18px 0 8px; color: var(--accent); }
+.tab-panel h4:first-child { margin-top: 0; }
+.tab-panel p { margin-bottom: 10px; }
+.tab-panel ul, .tab-panel ol { padding-left: 22px; margin-bottom: 12px; }
+.tab-panel li { margin-bottom: 4px; }
+.tab-panel strong { font-weight: 700; }
+.tab-panel em { font-style: italic; }
+.tab-panel pre { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 8px; padding: 14px 16px; font-family: 'SF Mono', Menlo, Monaco, 'Courier New', monospace; font-size: 12.5px; overflow-x: auto; margin: 12px 0; line-height: 1.5; white-space: pre; }
+.tab-panel code { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 4px; padding: 1px 5px; font-family: 'SF Mono', Menlo, Monaco, 'Courier New', monospace; font-size: 12px; }
+.tab-panel pre code { background: none; border: none; padding: 0; font-size: inherit; }
+.tab-panel table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.tab-panel th { background: var(--accent-bg); color: var(--accent); font-weight: 700; padding: 8px 12px; text-align: left; border: 1px solid var(--border); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.tab-panel td { padding: 8px 12px; border: 1px solid var(--border); }
+.tab-panel tr:nth-child(even) { background: var(--bg); }
+.mind-map { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 8px; padding: 20px; font-family: 'SF Mono', Menlo, Monaco, 'Courier New', monospace; font-size: 12px; line-height: 1.6; overflow-x: auto; color: var(--text); }
+.outline-block { border-left: 3px solid var(--accent); padding: 10px 16px; margin: 10px 0; background: var(--accent-bg); border-radius: 0 6px 6px 0; }
+.outline-block .time { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; }
+.outline-block p { margin: 4px 0 0; font-size: 13px; }
+.highlight-box { background: var(--accent-bg); border: 1px solid #bfdbfe; border-radius: 8px; padding: 14px 16px; margin: 14px 0; }
+[data-theme="dark"] .highlight-box { border-color: #1e3a5f; }
+.highlight-box .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); margin-bottom: 6px; }
+.formula { background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px; padding: 10px 14px; font-family: 'SF Mono', Menlo, Monaco, 'Courier New', monospace; font-size: 13px; margin: 8px 0; text-align: center; }
+
+/* Cheat sheet */
+.cheat-sheet pre { font-size: 12px; line-height: 1.7; }
+.cheat-q { border-bottom: 1px solid var(--border); padding: 12px 0; }
+.cheat-q:last-child { border-bottom: none; }
+.cheat-q .label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+.cheat-q .content { font-size: 13px; line-height: 1.6; }
+
+/* Strategy */
+.strategy-phase { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
+.strategy-phase .phase-time { font-size: 11px; font-weight: 700; color: var(--yellow); text-transform: uppercase; letter-spacing: 0.05em; }
+.strategy-phase p { margin-top: 6px; font-size: 13px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { width: 220px; }
+  .main { margin-left: 220px; padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h1>Modeling &amp; Simulation</h1>
+    <p>Complete Exam Study Guide</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="progress-text">0 / 12</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Questions</div>
+    <a class="nav-item active" href="#q1" onclick="navClick(this,'q1')"><span class="qnum">Q1</span>Describing Systems<span class="check">✓</span></a>
+    <a class="nav-item" href="#q2" onclick="navClick(this,'q2')"><span class="qnum">Q2</span>Dynamical Systems<span class="check">✓</span></a>
+    <a class="nav-item" href="#q3" onclick="navClick(this,'q3')"><span class="qnum">Q3</span>Balance Eq. &amp; Numerics<span class="check">✓</span></a>
+    <a class="nav-item" href="#q4" onclick="navClick(this,'q4')"><span class="qnum">Q4</span>Graphs &amp; Networks<span class="check">✓</span></a>
+    <a class="nav-item" href="#q5" onclick="navClick(this,'q5')"><span class="qnum">Q5</span>Building Graphs<span class="check">✓</span></a>
+    <a class="nav-item" href="#q6" onclick="navClick(this,'q6')"><span class="qnum">Q6</span>Lattice Boltzmann<span class="check">✓</span></a>
+    <a class="nav-item" href="#q7" onclick="navClick(this,'q7')"><span class="qnum">Q7</span>CFD &amp; LGA vs LBM<span class="check">✓</span></a>
+    <a class="nav-item" href="#q8" onclick="navClick(this,'q8')"><span class="qnum">Q8</span>Barnes-Hut<span class="check">✓</span></a>
+    <a class="nav-item" href="#q9" onclick="navClick(this,'q9')"><span class="qnum">Q9</span>Potentials<span class="check">✓</span></a>
+    <a class="nav-item" href="#q10" onclick="navClick(this,'q10')"><span class="qnum">Q10</span>Agent-Based Models<span class="check">✓</span></a>
+    <a class="nav-item" href="#q11" onclick="navClick(this,'q11')"><span class="qnum">Q11</span>ABM Spatial<span class="check">✓</span></a>
+    <a class="nav-item" href="#q12" onclick="navClick(this,'q12')"><span class="qnum">Q12</span>Social Systems<span class="check">✓</span></a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-section-label">Reference</div>
+    <a class="nav-item" href="#cheatsheet" onclick="navClick(this,'cheatsheet')"><span class="qnum">⚡</span>Cheat Sheet</a>
+    <a class="nav-item" href="#strategy" onclick="navClick(this,'strategy')"><span class="qnum">🎯</span>Exam Strategy</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="theme-toggle" onclick="toggleTheme()">🌙 Toggle Dark Mode</button>
+  </div>
+</nav>
+
+<main class="main">
+<div class="page-title">
+  <h2>Modeling &amp; Simulation of Natural and Social Phenomena</h2>
+  <p>All 12 exam questions — Full answers, 20-min outlines, and mind maps</p>
+</div>
+
+<!-- Q1 -->
+<div class="q-section" id="q1">
+  <div class="q-header">
+    <span class="q-badge">Q 1</span>
+    <div class="q-question">How can one describe a natural or social system for modeling &amp; simulation? How are time and space handled? Why do we need various approaches? What are boundary and initial conditions?</div>
+    <button class="done-btn" onclick="markDone('q1',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q1-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q1-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q1-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q1-answer">
+    <h4>What is a Model?</h4>
+    <p>A <strong>model</strong> is a simplified, abstract representation of a real system that captures the essential features relevant to the question being asked. The goal is NOT perfect replication — it is to understand a specific behavior or phenomenon.</p>
+    <ul>
+      <li>Real system → abstraction → model → simulation → results → insight into real system</li>
+      <li>"All models are wrong, but some are useful" (Box)</li>
+    </ul>
+    <h4>Describing a System</h4>
+    <p>A system is described by:</p>
+    <ul>
+      <li><strong>State variables</strong>: quantities that define the system at any point in time (e.g., temperature, position, population)</li>
+      <li><strong>Parameters</strong>: fixed values that characterize the system (e.g., viscosity, birth rate)</li>
+      <li><strong>Interactions/Rules</strong>: how components affect each other</li>
+    </ul>
+    <h4>Scales of Description</h4>
+    <table>
+      <tr><th>Scale</th><th>Description</th><th>Example</th></tr>
+      <tr><td>Micro</td><td>Individual components</td><td>Molecules, individual agents</td></tr>
+      <tr><td>Meso</td><td>Intermediate</td><td>Fluid parcels, groups of agents</td></tr>
+      <tr><td>Macro</td><td>Aggregate behavior</td><td>Pressure, bulk temperature, population</td></tr>
+    </table>
+    <h4>How is TIME Handled?</h4>
+    <p>The choice of how to represent time shapes the entire mathematical framework of a model. There are two fundamental options:</p>
+    <ul>
+      <li><strong>Continuous time</strong> (t ∈ ℝ⁺): The state evolves smoothly and is described by differential equations (ODEs or PDEs). The system can be queried at any instant. Example: dx/dt = f(x, t). Appropriate when the underlying physics is smooth — fluid flow, population growth, chemical reactions.</li>
+      <li><strong>Discrete time</strong> (t ∈ {0, Δt, 2Δt, ...}): The state advances in fixed steps and is described by difference equations or maps. Example: x(n+1) = f(x(n)). Natural for computer simulation and for systems that update at regular intervals (generations in ecology, daily infection counts in epidemics).</li>
+    </ul>
+    <div class="highlight-box"><div class="label">⚠ Key Warning</div>Discrete Event Simulation has CONTINUOUS time — it jumps between events, not fixed steps.</div>
+    <h4>How is SPACE Handled?</h4>
+    <p>Space can be represented in several ways, each imposing different constraints on interactions and leading to qualitatively different emergent behaviors:</p>
+    <ul>
+      <li><strong>Continuous space</strong>: Positions are real-valued coordinates in ℝ² or ℝ³ — any point in the domain is accessible. Used in particle simulations (molecular dynamics, N-body gravity) and Boids. Interactions are typically defined by a cutoff radius or computed for all pairs.</li>
+      <li><strong>Discrete space (grid/lattice)</strong>: Space is divided into a regular array of cells, each with a discrete address (i, j). Used in cellular automata, the Lattice Boltzmann Method, and fire-spread models. The geometry of the lattice (square vs hexagonal) affects the isotropy of spreading patterns.</li>
+      <li><strong>Network</strong>: Space is replaced entirely by graph connectivity — who can interact with whom is determined by the presence of an edge, not by geographic distance. The right representation for social dynamics (opinion spreading, epidemic on a contact network).</li>
+      <li><strong>No space (lumped/mean-field)</strong>: The system is treated as a single well-mixed container where every agent interacts equally with every other. ODE population models (SIR, Lotka-Volterra) implicitly assume this. Analytically tractable but ignores all spatial heterogeneity and clustering.</li>
+    </ul>
+    <h4>Why Do We Need VARIOUS Modeling Approaches?</h4>
+    <p>No single modeling framework can capture all natural and social phenomena. Each approach is tailored to a specific scale, level of description, and type of question:</p>
+    <ul>
+      <li><strong>Particle methods</strong>: Track individual particles (positions and velocities) interacting pairwise — suited to N-body gravitational systems and molecular dynamics where microscopic detail matters.</li>
+      <li><strong>Lattice Boltzmann</strong>: Uses a mesoscopic kinetic description to simulate fluid dynamics and recover the Navier-Stokes equations — ideal for complex geometries and multi-phase flows where the continuum PDE approach is hard to implement.</li>
+      <li><strong>Dynamical systems / ODEs</strong>: Describe aggregated quantities (population size, infection count) evolving continuously in time — best when individual differences are unimportant and the system can be reduced to a few state variables.</li>
+      <li><strong>Cellular automata / ABM</strong>: Encode simple local rules for individual agents and observe emergent global patterns — suited to social behavior and spatial dynamics where the macro-level behavior is not obvious from the micro-level rules.</li>
+      <li><strong>Discrete Event Simulation</strong>: Advances time by jumping between events (arrivals, collisions) rather than fixed steps — used for queuing systems and collision-driven processes where most of the time nothing happens.</li>
+      <li><strong>Network models</strong>: Replace geometric space with graph connectivity to study how the structure of social or physical networks shapes the spread of information, disease, or influence.</li>
+    </ul>
+    <p>The choice of approach depends on the scale of interest (micro/meso/macro), whether behavior is deterministic or stochastic, computational cost constraints, and what observables are needed to answer the scientific question.</p>
+    <h4>Initial Conditions</h4>
+    <p>The <strong>initial condition</strong> is the complete state of the system at time t = 0: x(0) = x₀. Critical: small differences in IC can lead to vastly different outcomes (chaos).</p>
+    <h4>Boundary Conditions</h4>
+    <p><strong>Boundary conditions</strong> specify what happens at the edges of the simulation domain. Without them, the problem is not well-posed.</p>
+    <table>
+      <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+      <tr><td><strong>Dirichlet</strong> (fixed value)</td><td>Variable fixed at boundary</td><td>Wall with fixed temperature T = T_wall</td></tr>
+      <tr><td><strong>Neumann</strong> (fixed flux)</td><td>Derivative (flux) is fixed</td><td>Insulated wall → ∂T/∂n = 0</td></tr>
+      <tr><td><strong>Periodic</strong></td><td>Exit one side, re-enter from opposite</td><td>Simulates infinite domain (torus topology)</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q1-outline">
+    <div class="outline-block"><div class="time">0:00 – 2:00 — Hook &amp; Definition</div><p>"Before we simulate anything, we must ask: what IS a model?" Model = simplified representation, not perfect copy. State variables + parameters + interaction rules.</p></div>
+    <div class="outline-block"><div class="time">2:00 – 5:00 — Time &amp; Space</div><p>Continuous vs discrete time (table). Continuous vs discrete space (grid, network, no space). Give 1 concrete example for each.</p></div>
+    <div class="outline-block"><div class="time">5:00 – 10:00 — Why Multiple Approaches</div><p>Walk through the course's modeling zoo: particles, LBM, ODE, CA, ABM, DES. Each targets a different scale/question. Draw the "modeling landscape": micro → macro.</p></div>
+    <div class="outline-block"><div class="time">10:00 – 15:00 — Initial &amp; Boundary Conditions</div><p>IC: what happens at t=0, why it matters (chaos sensitivity). BC: the 3 types with physical meaning. Draw a fluid domain with boundary labels.</p></div>
+    <div class="outline-block"><div class="time">15:00 – 20:00 — Summary + Example</div><p>Pick one system (epidemic / fluid flow) and trace through: what model? what IC? what BC? Reinforce: no universal model → need many approaches.</p></div>
+  </div>
+  <div class="tab-panel" id="q1-map">
+    <pre class="mind-map">
+                    DESCRIBING A SYSTEM
+                           |
+        ┌──────────────────┼──────────────────┐
+        |                  |                  |
+    COMPONENTS          SCALES             APPROACHES
+    - State vars        - Micro            - ODE/PDE
+    - Parameters        - Meso             - Particles
+    - Rules             - Macro            - LBM
+                                           - CA / ABM
+                                           - DES
+                                           - Networks
+        |                  |
+      TIME               SPACE
+   ┌───┴───┐          ┌───┴────┐
+Continuous  Discrete  Cont.    Discrete
+  dx/dt=f   x(n+1)=f  (x,y,z) (grid/net)
+
+        |                  |
+  INITIAL COND.    BOUNDARY COND.
+  - State at t=0   - Dirichlet (fixed val)
+  - Small Δ →      - Neumann (fixed flux)
+    big difference - Periodic (wrapping)
+    (chaos!)
+    </pre>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="q-section" id="q2">
+  <div class="q-header">
+    <span class="q-badge">Q 2</span>
+    <div class="q-question">What is a dynamical system? Continuous vs discrete time. Fixed point, limit cycle, chaos. Examples.</div>
+    <button class="done-btn" onclick="markDone('q2',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q2-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q2-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q2-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q2-answer">
+    <h4>Definition</h4>
+    <p>A <strong>dynamical system</strong> is a system whose state evolves over time according to a well-defined rule. Formally: the triple (T, X, Φ) where:</p>
+    <ul>
+      <li><strong>T</strong> = time domain (ℝ continuous, ℤ discrete)</li>
+      <li><strong>X</strong> = state space (phase space)</li>
+      <li><strong>Φ</strong>: T × X → X = evolution rule (flow or map)</li>
+    </ul>
+    <h4>Continuous Time — ODEs</h4>
+    <p>In continuous time, the state x(t) evolves smoothly and is governed by an ordinary differential equation of the form dx/dt = f(x, t). The system is called <strong>autonomous</strong> if f does not depend explicitly on t — the dynamics look the same no matter when you observe them. Classic examples from this course:</p>
+    <pre>dx/dt = f(x, t)   (autonomous if f doesn't depend on t)</pre>
+    <ul>
+      <li><strong>Logistic growth</strong>: dN/dt = rN(1 − N/K) — population grows exponentially when N ≪ K and saturates as N approaches the carrying capacity K due to resource competition.</li>
+      <li><strong>Lotka-Volterra</strong>: dx/dt = αx − βxy (prey grows at rate α but is consumed by predators at rate β·y); dy/dt = δxy − γy (predators grow by consuming prey at rate δ·x but die naturally at rate γ). Produces self-sustaining oscillations in both populations.</li>
+      <li><strong>Lorenz system</strong>: dx/dt = σ(y−x); dy/dt = x(ρ−z)−y; dz/dt = xy−βz. A simplified model of atmospheric convection and the prototypical example of deterministic chaos — despite being fully deterministic, its trajectories are sensitive to initial conditions.</li>
+    </ul>
+    <h4>Discrete Time — Maps</h4>
+    <p>In discrete time, the state advances in fixed steps via a <strong>map</strong>: x(n+1) = f(x(n)). Each application of f corresponds to one time step. The same nonlinear phenomena (fixed points, period doubling, chaos) appear in maps as in ODEs, but in a form that is directly iterable on a computer. The canonical example is the logistic map:</p>
+    <pre>x(n+1) = r·x(n)·(1 − x(n))</pre>
+    <p>Here r is the only parameter. For r &lt; 3 the map converges to a stable fixed point; for 3 &lt; r &lt; 3.57 it undergoes a cascade of period doublings (2 → 4 → 8 → ...); and for r &gt; 3.57 the behavior is chaotic — all of this complexity from a single quadratic equation.</p>
+    <h4>Fixed Points (Equilibria)</h4>
+    <p>A <strong>fixed point</strong> x* is a state where the system does not change:</p>
+    <ul>
+      <li>Continuous: f(x*) = 0</li>
+      <li>Discrete: f(x*) = x*</li>
+    </ul>
+    <p><strong>Stability</strong> is determined by linearizing the dynamics around x* and examining the eigenvalues λ of the Jacobian matrix Df(x*). A small perturbation δx = x − x* evolves according to δẋ ≈ Df(x*)·δx, so the eigenvalues control whether perturbations grow or shrink:</p>
+    <ul>
+      <li>Re(λ) &lt; 0 for all eigenvalues → <strong>stable attractor</strong>: all perturbations decay exponentially back toward x*. The fixed point acts like a sink in phase space.</li>
+      <li>Re(λ) &gt; 0 for any eigenvalue → <strong>unstable repellor</strong>: perturbations in the corresponding direction grow exponentially and the system moves away from x*. Acts like a source.</li>
+      <li>Re(λ) = 0 → <strong>center</strong> (neutrally stable): the linear analysis is inconclusive. Higher-order terms must be examined to determine stability (e.g., Lotka-Volterra fixed point is a center with neutrally stable cycles).</li>
+    </ul>
+    <h4>Limit Cycles</h4>
+    <p>A <strong>limit cycle</strong> is a closed, isolated trajectory in phase space — the system oscillates periodically and neighboring trajectories spiral toward (stable) or away from (unstable) it. Example: Van der Pol oscillator → stable limit cycle. Lotka-Volterra → closed orbits (neutrally stable cycles).</p>
+    <h4>Chaos</h4>
+    <p><strong>Chaos</strong> is deterministic but unpredictable behavior characterized by:</p>
+    <ul>
+      <li><strong>SDIC</strong>: two trajectories starting arbitrarily close diverge exponentially — "butterfly effect"</li>
+      <li><strong>Bounded</strong>: not diverging to infinity</li>
+      <li><strong>Aperiodic</strong>: never repeats exactly</li>
+      <li>Quantified by <strong>Lyapunov exponent λ &gt; 0</strong></li>
+    </ul>
+    <p>Logistic map: r &lt; 3 → fixed point; 3 &lt; r &lt; ~3.57 → period doubling; r &gt; ~3.57 → chaos.</p>
+    <table>
+      <tr><th>Behavior</th><th>Continuous</th><th>Discrete</th><th>Long-term</th></tr>
+      <tr><td>Fixed point</td><td>f(x*)=0</td><td>f(x*)=x*</td><td>Steady state</td></tr>
+      <tr><td>Limit cycle</td><td>Closed orbit</td><td>Period-n orbit</td><td>Oscillation</td></tr>
+      <tr><td>Chaos</td><td>Strange attractor</td><td>Chaotic map</td><td>Unpredictable</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q2-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — What is a Dynamical System</div><p>State, state space, evolution rule. Phase space visualization.</p></div>
+    <div class="outline-block"><div class="time">3:00 – 8:00 — Continuous vs Discrete</div><p>Write ODE form vs map form. Logistic growth (continuous) vs Logistic map (discrete). Key difference: continuous = smooth trajectory; discrete = sequence of points.</p></div>
+    <div class="outline-block"><div class="time">8:00 – 13:00 — Fixed Points &amp; Limit Cycles</div><p>Define fixed point mathematically. Stability via linearization + eigenvalues. Draw phase portrait: stable vs unstable node, spiral. Limit cycle: Lotka-Volterra example, draw the orbit.</p></div>
+    <div class="outline-block"><div class="time">13:00 – 18:00 — Chaos</div><p>Define SDIC — show two close trajectories diverging. Lorenz butterfly — draw the attractor shape. Logistic map bifurcation diagram: fixed → period-2 → period-4 → chaos. Lyapunov exponent briefly.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Summary</div><p>Table: fixed point / limit cycle / chaos. Real-world relevance: weather, ecology, finance.</p></div>
+  </div>
+  <div class="tab-panel" id="q2-map">
+    <pre class="mind-map">
+                    DYNAMICAL SYSTEM
+                    x evolves via rule
+                         |
+              ┌──────────┴──────────┐
+         CONTINUOUS             DISCRETE
+          dx/dt = f(x)         x(n+1) = f(x(n))
+          ODE                  Map
+          Lorenz, LV           Logistic map
+              |
+    ┌─────────┼──────────┐
+    |         |          |
+FIXED PT  LIMIT CYCLE  CHAOS
+f(x*)=0  closed orbit  SDIC
+  |          |           |
+stable?   Lotka-    Lorenz attractor
+           Volterra  Lyapunov λ > 0
+  |                   |
+eigenvalues      Bifurcation
+  Re&lt;0: stable   diagram
+  Re&gt;0: unstable  (period doubling)
+    </pre>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="q-section" id="q3">
+  <div class="q-header">
+    <span class="q-badge">Q 3</span>
+    <div class="q-question">Modeling a process via balance equation. Numerical methods to solve a dynamical system.</div>
+    <button class="done-btn" onclick="markDone('q3',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q3-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q3-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q3-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q3-answer">
+    <h4>The Balance Equation</h4>
+    <div class="formula">d(Q)/dt = (Rate IN) − (Rate OUT) + (Source) − (Sink)</div>
+    <p>This is the <strong>master template</strong> for all dynamical models. It embodies conservation laws. Steps: (1) identify quantity to track, (2) identify domain, (3) write fluxes in/out, (4) add source/sink terms.</p>
+    <h4>Example: SIR Epidemic Model</h4>
+    <pre>dS/dt = -β·S·I/N        (outflow: infections)
+dI/dt = β·S·I/N - γ·I   (inflow: infections; outflow: recovery)
+dR/dt = γ·I              (inflow: recoveries)
+Conservation: S + I + R = N = const</pre>
+    <h4>Example: Heat Diffusion (PDE)</h4>
+    <pre>ρc ∂T/∂t = k ∇²T   (heat equation)</pre>
+    <h4>Numerical Methods</h4>
+    <p>We approximate x(t) at discrete steps t₀, t₁, t₂, ... with step size Δt.</p>
+    <h4>Forward Euler (Explicit)</h4>
+    <pre>x(n+1) = x(n) + Δt · f(x(n), t(n))</pre>
+    <ul>
+      <li><strong>Pros</strong>: Simple, O(1) per step</li>
+      <li><strong>Cons</strong>: First-order accuracy (error ~ Δt), can be unstable if Δt too large</li>
+      <li>Stability condition: Δt &lt; 2/|λ_max|</li>
+    </ul>
+    <h4>Backward Euler (Implicit)</h4>
+    <pre>x(n+1) = x(n) + Δt · f(x(n+1), t(n+1))</pre>
+    <ul>
+      <li><strong>Pros</strong>: Unconditionally stable → can use large Δt</li>
+      <li><strong>Cons</strong>: Must solve implicit equation at each step</li>
+    </ul>
+    <h4>Runge-Kutta 4th Order (RK4) — Gold Standard</h4>
+    <pre>k₁ = f(x(n), t(n))
+k₂ = f(x(n) + Δt·k₁/2, t(n) + Δt/2)
+k₃ = f(x(n) + Δt·k₂/2, t(n) + Δt/2)
+k₄ = f(x(n) + Δt·k₃, t(n+1))
+
+x(n+1) = x(n) + (Δt/6)(k₁ + 2k₂ + 2k₃ + k₄)</pre>
+    <ul>
+      <li><strong>Pros</strong>: 4th-order accuracy (error ~ Δt⁴), excellent accuracy/cost ratio</li>
+      <li><strong>Cons</strong>: 4 function evaluations per step; still explicit</li>
+    </ul>
+    <table>
+      <tr><th>Method</th><th>Order</th><th>Stability</th><th>Cost</th></tr>
+      <tr><td>Forward Euler</td><td>1</td><td>Conditional</td><td>1 eval/step</td></tr>
+      <tr><td>Backward Euler</td><td>1</td><td>Unconditional</td><td>Solve equation/step</td></tr>
+      <tr><td>RK4</td><td>4</td><td>Conditional</td><td>4 evals/step</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q3-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — The Balance Equation</div><p>Write the master formula: d/dt = in − out + source − sink. Emphasize: this is universal (populations, heat, mass, money...).</p></div>
+    <div class="outline-block"><div class="time">3:00 – 8:00 — Build 2 Models</div><p>SIR epidemic: walk through each balance equation. Draw compartment diagram (boxes + arrows). Optional: Lotka-Volterra as 2nd example.</p></div>
+    <div class="outline-block"><div class="time">8:00 – 12:00 — Why Numerical Methods?</div><p>Most ODEs have no analytical solution. We discretize time → approximate the trajectory.</p></div>
+    <div class="outline-block"><div class="time">12:00 – 18:00 — Three Methods</div><p>Forward Euler: draw tangent-line picture. Write the formula, discuss stability graphically. RK4: explain the 4 slopes concept ("average slope"). Brief on Backward Euler (implicit = stable).</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Comparison &amp; Takeaway</div><p>When to use each: Euler for simple/education, RK4 for production, Implicit for stiff.</p></div>
+  </div>
+  <div class="tab-panel" id="q3-map">
+    <pre class="mind-map">
+              BALANCE EQUATION
+         dQ/dt = IN - OUT + SOURCE
+                    |
+        ┌───────────┴────────────┐
+    EXAMPLES                LEADS TO
+    SIR model               ODE / PDE
+    Lotka-Volterra          System
+    Heat equation           |
+                        NEED NUMERICAL
+                          METHODS
+                            |
+              ┌─────────────┼──────────────┐
+         EULER FWD      EULER BWD          RK4
+         x+Δt·f(x)   x+Δt·f(x+1)    4-stage weighted
+         Simple         Implicit      avg of slopes
+         Order 1        Stable        Order 4
+         May diverge    Solve eq.     Gold standard
+    </pre>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="q-section" id="q4">
+  <div class="q-header">
+    <span class="q-badge">Q 4</span>
+    <div class="q-question">Main quantities of a graph/network. Adjacency matrix. Small-world networks. Degree distribution.</div>
+    <button class="done-btn" onclick="markDone('q4',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q4-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q4-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q4-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q4-answer">
+    <h4>Basic Definitions</h4>
+    <p>A <strong>graph</strong> G = (V, E) consists of V = vertices (nodes): |V| = N, and E = edges (links): |E| = L. Types: directed/undirected, weighted/unweighted.</p>
+    <h4>Key Quantities</h4>
+    <p><strong>Degree</strong>: k_i = Σ_j A_ij (number of edges at node i). Average degree: ⟨k⟩ = 2L/N.</p>
+    <p><strong>Adjacency Matrix A</strong> ∈ {0,1}^{N×N}:</p>
+    <pre>A_ij = 1  if edge (i,j) ∈ E
+A_ij = 0  otherwise</pre>
+    <ul>
+      <li><strong>Undirected networks</strong>: A is symmetric (A_ij = A_ji), since an edge between i and j is the same as one between j and i. Directed networks have non-symmetric adjacency matrices. Memory cost is O(N²) regardless.</li>
+      <li><strong>No self-loops</strong>: The diagonal entries A_ii = 0 by convention, as a node is not considered its own neighbor (unless self-loops are explicitly modeled).</li>
+      <li><strong>Powers of A</strong>: The entry (A²)_ij counts the number of walks of length 2 from node i to node j — in general (Aᵏ)_ij counts all walks of length k. This connects graph topology directly to linear algebra and enables efficient computation of path-based measures.</li>
+    </ul>
+    <p><strong>Clustering Coefficient</strong>: C_i = 2·t_i / (k_i(k_i − 1)) — fraction of node i's neighbors that are connected to each other.</p>
+    <p><strong>Average path length</strong>: L = 1/[n(n−1)] Σ_{i≠j} d(i,j). <strong>Diameter</strong> D = max path length.</p>
+    <h4>Degree Distribution P(k)</h4>
+    <p>P(k) = fraction of nodes with degree k — the "fingerprint" of a network.</p>
+    <ul>
+      <li><strong>Erdős-Rényi (ER)</strong> G(N,p): P(k) follows <strong>Poisson distribution</strong>. No hubs, exponential tail.</li>
+      <li><strong>Scale-free (BA)</strong>: P(k) ~ k^{−γ} (power law, γ ≈ 2–3). Heavy tail → <strong>hubs</strong>. Examples: WWW, airports, proteins.</li>
+    </ul>
+    <h4>Small-World Networks (Watts-Strogatz, 1998)</h4>
+    <p>Real networks have TWO properties: <strong>high clustering C</strong> (like a lattice) + <strong>short average path length L ~ log N</strong> (like a random graph).</p>
+    <p>WS model: Start with ring lattice → rewire each edge with probability p → small p adds "shortcuts" that dramatically reduce L while keeping C high.</p>
+    <div class="highlight-box"><div class="label">Key Result</div>"Six degrees of separation": in social networks, any two people are connected by ~6 hops.</div>
+  </div>
+  <div class="tab-panel" id="q4-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — What is a Graph?</div><p>G = (V,E), directed/undirected, weighted/unweighted. Draw a tiny example graph.</p></div>
+    <div class="outline-block"><div class="time">3:00 – 8:00 — Key Quantities</div><p>Degree, average degree — compute on example. Adjacency matrix — write it for the example graph. Distance, diameter, path length.</p></div>
+    <div class="outline-block"><div class="time">8:00 – 13:00 — Degree Distribution</div><p>What does P(k) tell us? Poisson (ER random) vs Power-law (scale-free). Draw both distributions side by side. Why it matters: robustness, hubs, epidemic spreading.</p></div>
+    <div class="outline-block"><div class="time">13:00 – 18:00 — Small-World</div><p>The paradox: high clustering + short paths. WS model: start ring, rewire with p. Draw the transition: regular → small-world → random. Real examples: social networks, brain, WWW.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Summary</div><p>Table: ER vs WS vs BA — their clustering, path length, degree distribution.</p></div>
+  </div>
+  <div class="tab-panel" id="q4-map">
+    <pre class="mind-map">
+                  GRAPH G = (V, E)
+                       |
+         ┌─────────────┼─────────────┐
+       NODES         EDGES         TYPES
+       |V|=N         |E|=L       Directed/Undirected
+                                  Weighted/Unweighted
+         |
+    KEY QUANTITIES
+    ┌────┬────┬────┬────┐
+  Degree  Adj  Path  Clust
+  k_i=   Aij  d(i,j) C_i
+  ΣAij   {0,1} geodesic tri/possible
+  ⟨k⟩=2L/N  symmetric
+
+                        DEGREE DISTRIBUTION
+                         P(k)
+                     ┌───┴───┐
+                  Poisson  Power-law
+                  (ER)     (Scale-free)
+                  no hubs  hubs exist
+                           P(k)~k^-γ
+
+                     SMALL-WORLD
+                     High C + small L
+                     WS model (rewiring p)
+                     "6 degrees of separation"
+    </pre>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="q-section" id="q5">
+  <div class="q-header">
+    <span class="q-badge">Q 5</span>
+    <div class="q-question">Building a graph with a computer. Types of graphs. Propose a dynamical model on a complex network.</div>
+    <button class="done-btn" onclick="markDone('q5',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q5-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q5-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q5-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q5-answer">
+    <h4>Data Structures</h4>
+    <ul>
+      <li><strong>Adjacency matrix</strong>: N×N array A[i][j]=1 if edge exists. Fast lookup O(1), memory O(N²) — bad for sparse networks.</li>
+      <li><strong>Adjacency list</strong>: list of neighbors for each node. Memory O(N+L) — efficient for sparse networks. Standard for large networks.</li>
+    </ul>
+    <h4>Graph Generation Models</h4>
+    <p><strong>Erdős-Rényi G(N,p)</strong>:</p>
+    <pre>1. Start with N isolated nodes
+2. For each pair (i,j): draw r ~ U[0,1]
+   if r &lt; p: add edge (i,j)</pre>
+    <p>Properties: Poisson degree distribution, ⟨k⟩ = (N−1)p. <strong>Giant component</strong> emerges at p &gt; 1/N (phase transition). Low clustering, short paths.</p>
+    <p><strong>Watts-Strogatz Small-World</strong>:</p>
+    <pre>1. Create ring lattice: N nodes, each connected to k nearest neighbors
+2. For each edge: with probability p, rewire to random node</pre>
+    <p>Tuning p: regular (p=0) → small-world → random (p=1). High clustering + short paths at intermediate p.</p>
+    <p><strong>Barabási-Albert Scale-Free (Preferential Attachment)</strong>:</p>
+    <pre>1. Start with m₀ fully connected nodes
+2. At each step: add new node with m edges
+3. Connect to existing node i with probability:
+   Π(i) = k_i / Σ_j k_j   ("rich get richer")</pre>
+    <p>Results in power-law degree distribution P(k) ~ k^{−3}. Natural model for WWW, citations, social networks.</p>
+    <table>
+      <tr><th>Model</th><th>P(k)</th><th>Clustering</th><th>Path Length</th></tr>
+      <tr><td>ER</td><td>Poisson</td><td>Low</td><td>~ log N</td></tr>
+      <tr><td>WS</td><td>Poisson</td><td>High</td><td>~ log N</td></tr>
+      <tr><td>BA</td><td>Power law</td><td>Medium</td><td>~ log N / log log N</td></tr>
+    </table>
+    <h4>Dynamical Model: SIR Epidemic on a Network</h4>
+    <p>Each node = one person. Each edge = potential transmission route. States: S, I, R.</p>
+    <p><strong>Rules (discrete time)</strong>: Each infected node I infects each susceptible neighbor S with probability β. Each I recovers with probability γ.</p>
+    <p><strong>Basic reproduction number</strong>: R₀ = β · ⟨k⟩ / γ. If R₀ &gt; 1: epidemic spreads.</p>
+    <div class="highlight-box"><div class="label">Key Result: Scale-Free Networks</div>On scale-free (BA) networks: <strong>NO epidemic threshold!</strong> Even tiny β causes spreading because hubs act as super-spreaders. Threshold = ⟨k⟩/⟨k²⟩ → 0 as ⟨k²⟩ → ∞.</div>
+    <pre>for infected_node in I_list:
+    for neighbor in adjacency_list[infected_node]:
+        if state[neighbor] == 'S' and random() &lt; beta:
+            state[neighbor] = 'I'   # infection
+    if random() &lt; gamma:
+        state[infected_node] = 'R'  # recovery</pre>
+  </div>
+  <div class="tab-panel" id="q5-outline">
+    <div class="outline-block"><div class="time">0:00 – 4:00 — Data Structures</div><p>Adj matrix vs adj list — draw both for same tiny graph. When to use which (sparse vs dense).</p></div>
+    <div class="outline-block"><div class="time">4:00 – 12:00 — Three Models</div><p>ER: write algorithm, show Poisson distribution. WS: start from ring, rewiring p concept. BA: preferential attachment — "rich get richer". Quick comparison table.</p></div>
+    <div class="outline-block"><div class="time">12:00 – 18:00 — SIR on a Network</div><p>Define states S/I/R. Write infection and recovery rules. R₀ concept. Key result: scale-free → no threshold! Show contrast with ER. Draw epidemic curves for different network types.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Conclusion</div><p>Network structure profoundly shapes dynamics. COVID-19: super-spreaders ≈ hubs in contact network.</p></div>
+  </div>
+  <div class="tab-panel" id="q5-map">
+    <pre class="mind-map">
+              BUILDING GRAPHS
+                    |
+     ┌──────────────┼──────────────┐
+  ADJ MATRIX    ADJ LIST       MODELS
+  N×N, O(1)    O(N+L)         |
+  lookup        sparse OK  ┌──┴──────┐
+                         ER    WS    BA
+                         G(N,p) ring  pref.att.
+                         Poisson high-C power-law
+                         no hubs  short-L  hubs
+                              |
+                    DYNAMICAL MODEL ON NET
+                         SIR EPIDEMIC
+                    S→I: prob β per edge
+                    I→R: prob γ
+                    R₀ = β⟨k⟩/γ
+                         |
+                 Network effect:
+                 ER: threshold at R₀=1
+                 BA: NO threshold (hubs!)
+                 WS: clustering slows spread
+    </pre>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="q-section" id="q6">
+  <div class="q-header">
+    <span class="q-badge">Q 6</span>
+    <div class="q-question">What is the Lattice Boltzmann Method? Purpose, equations, algorithm.</div>
+    <button class="done-btn" onclick="markDone('q6',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q6-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q6-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q6-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q6-answer">
+    <h4>Purpose</h4>
+    <p>The <strong>Lattice Boltzmann Method (LBM)</strong> is a numerical method for simulating <strong>fluid dynamics</strong> (solving Navier-Stokes equations) using a mesoscopic kinetic approach. Advantages: naturally parallel, easy complex geometries, simple to implement, handles multi-phase flows.</p>
+    <h4>Physical Foundation: Kinetic Theory</h4>
+    <p>Instead of tracking individual molecules, LBM tracks the <strong>probability density function</strong> f(x, v, t) — density of particles at position x, velocity v, time t. Boltzmann equation: ∂f/∂t + v·∇f = Ω(f).</p>
+    <p>Macroscopic variables from moments of f:</p>
+    <pre>Density:   ρ = ∫f dv
+Momentum:  ρu = ∫v·f dv</pre>
+    <h4>D2Q9 Discretization</h4>
+    <p>Space → regular lattice. Velocity space → 9 discrete directions in 2D:</p>
+    <pre>D2Q9: 9 velocity directions
+   6  2  5
+   3  0  1     e₀=(0,0), e₁=(1,0), e₂=(0,1), e₃=(-1,0), e₄=(0,-1)
+   7  4  8     e₅=(1,1), e₆=(-1,1), e₇=(-1,-1), e₈=(1,-1)</pre>
+    <p>At each node: 9 populations f_i(x,t). Memory: N × M × 9 floats.</p>
+    <h4>Macroscopic Variables</h4>
+    <pre>ρ(x,t)  = Σᵢ fᵢ(x,t)          (density)
+ρu(x,t) = Σᵢ fᵢ(x,t)·eᵢ       (momentum)</pre>
+    <h4>BGK Collision Equation</h4>
+    <pre>fᵢ(x + eᵢδt, t + δt) = fᵢ(x,t) - (1/τ)[fᵢ(x,t) - fᵢᵉq(x,t)]</pre>
+    <p>τ = relaxation time. Viscosity: ν = cs²(τ − 0.5)δt. cs = 1/√3 (speed of sound on lattice).</p>
+    <p>Equilibrium distribution:</p>
+    <pre>fᵢᵉq(ρ, u) = wᵢ · ρ · [1 + (eᵢ·u)/cs² + (eᵢ·u)²/(2cs⁴) - u²/(2cs²)]
+Weights: w₀=4/9, w₁₋₄=1/9, w₅₋₈=1/36</pre>
+    <h4>Algorithm: Two Steps Per Iteration</h4>
+    <p><strong>COLLISION</strong> (local, at each node — fully parallel):</p>
+    <pre>f̃ᵢ(x,t) = fᵢ(x,t) - (1/τ)[fᵢ(x,t) - fᵢᵉq(ρ(x,t), u(x,t))]</pre>
+    <p><strong>STREAMING</strong> (propagate to neighbors):</p>
+    <pre>fᵢ(x + eᵢδt, t + δt) = f̃ᵢ(x,t)</pre>
+    <p><strong>Boundary conditions</strong>: <em>Bounce-back</em> for no-slip walls (populations reflecting into wall return in opposite direction). Inflow/outflow: prescribed velocity or pressure.</p>
+  </div>
+  <div class="tab-panel" id="q6-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — What problem are we solving?</div><p>Fluid dynamics → Navier-Stokes equations. LBM: mesoscopic approach from kinetic theory.</p></div>
+    <div class="outline-block"><div class="time">3:00 – 7:00 — Kinetic Theory Basis</div><p>Molecules → probability distribution f(x,v,t). Moments of f give ρ and u. Boltzmann equation.</p></div>
+    <div class="outline-block"><div class="time">7:00 – 12:00 — Discretization</div><p>D2Q9: draw the 9 directions on grid. Each node stores 9 populations f_i. Memory formula: N×M×9 floats.</p></div>
+    <div class="outline-block"><div class="time">12:00 – 17:00 — The Algorithm</div><p>Write BGK equation. Collision step: local relaxation toward fᵉq. Streaming step: propagate to neighbors. Draw 2-step cycle on whiteboard.</p></div>
+    <div class="outline-block"><div class="time">17:00 – 20:00 — Key Features + BCs</div><p>Viscosity controlled by τ. Bounce-back for walls. Naturally parallel → GPU computing.</p></div>
+  </div>
+  <div class="tab-panel" id="q6-map">
+    <pre class="mind-map">
+            LATTICE BOLTZMANN METHOD
+                      |
+         ┌────────────┼────────────┐
+      PURPOSE      PHYSICS       DISCRETIZE
+      Simulate    Kinetic        D2Q9: 9 dirs
+      fluids      theory        lattice nodes
+      (N-S eqs)   f(x,v,t)      fᵢ(x,t)
+                      |
+             MACROSCOPIC VARS
+             ρ = Σfᵢ   ρu = ΣfᵢEᵢ
+                      |
+               BGK EQUATION
+       fᵢ(x+eδt,t+δt) = fᵢ - (1/τ)(fᵢ-fᵢeq)
+                      |
+              ┌───────┴────────┐
+          COLLISION           STREAMING
+          Local relaxation    Propagate to
+          toward fᵉq          neighbors
+          Parallel!           eᵢ direction
+                      |
+             BOUNDARY CONDITIONS
+             Bounce-back = no-slip wall
+             Viscosity ν = cs²(τ-0.5)δt
+    </pre>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="q-section" id="q7">
+  <div class="q-header">
+    <span class="q-badge">Q 7</span>
+    <div class="q-question">Computational Fluid Dynamics. Lattice Gas vs Lattice Boltzmann. Differences.</div>
+    <button class="done-btn" onclick="markDone('q7',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q7-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q7-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q7-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q7-answer">
+    <h4>Navier-Stokes Equations</h4>
+    <pre>∂ₜu + (u·∇)u = -(1/ρ₀)∇p + ν∆u    (momentum)
+∇·u = 0                               (incompressibility)</pre>
+    <p>Terms: ∂ₜu = local acceleration; (u·∇)u = convective (nonlinear!); −∇p/ρ = pressure gradient; ν∆u = viscous dissipation.</p>
+    <p><strong>Reynolds number</strong>: Re = UL/ν. Low Re → laminar; High Re → turbulent. N-S are nonlinear PDEs → numerical simulation essential.</p>
+    <h4>Lattice Gas Automata (LGA) — Historical Predecessor</h4>
+    <p>HPP model (1973): square lattice. FHP model (1986): hexagonal lattice.</p>
+    <ul>
+      <li>Each particle: <strong>Boolean variable</strong> — present (1) or absent (0)</li>
+      <li>Each step: <strong>Streaming</strong> (move to neighbor) + <strong>Collision</strong> (scatter conserving mass + momentum)</li>
+    </ul>
+    <p><strong>Problems with LGA</strong> — despite the elegance of the approach, lattice gas automata suffer from three fundamental limitations that motivated the development of LBM:</p>
+    <ol>
+      <li><strong>Statistical noise</strong>: Because each particle is represented as a Boolean (present or absent), the density and momentum fields computed from local averages have large random fluctuations. Extracting smooth macroscopic fields requires ensemble averaging or spatial smoothing over many runs, which is computationally expensive and defeats much of the simplicity advantage.</li>
+      <li><strong>Galilean invariance violated</strong>: The advection term (u·∇)u in the Navier-Stokes equation is not correctly recovered by LGA on standard lattices. The recovered equations contain a spurious density-dependent factor in the convective term, meaning the model does not correctly describe flows at different mean velocities — a fundamental physical symmetry is broken.</li>
+      <li><strong>Dimension constraints</strong>: The hexagonal FHP model works correctly in 2D, but extension to 3D requires more complex lattice geometries (face-centered hypercubic, FCHC) with many velocity directions, making 3D LGA practically very difficult to implement and use.</li>
+    </ol>
+    <h4>LBM vs LGA Comparison</h4>
+    <table>
+      <tr><th>Feature</th><th>Lattice Gas (LGA)</th><th>Lattice Boltzmann (LBM)</th></tr>
+      <tr><td>Variables</td><td>Boolean (0 or 1)</td><td>Real-valued floats</td></tr>
+      <tr><td>Collision</td><td>Lookup table</td><td>BGK analytic formula</td></tr>
+      <tr><td>Noise</td><td>High (statistical)</td><td>Very low</td></tr>
+      <tr><td>Galilean invariance</td><td>Violated (HPP/FHP)</td><td>Satisfied</td></tr>
+      <tr><td>Viscosity control</td><td>Via lattice geometry</td><td>Via τ parameter</td></tr>
+      <tr><td>Accuracy</td><td>Lower</td><td>Higher</td></tr>
+    </table>
+    <div class="highlight-box"><div class="label">Key Insight</div>LBM replaces Boolean variables with continuous probability density functions fᵢ, and lookup-table collision with the smooth BGK formula. The result correctly recovers incompressible Navier-Stokes in the limit of small Mach number.</div>
+  </div>
+  <div class="tab-panel" id="q7-outline">
+    <div class="outline-block"><div class="time">0:00 – 4:00 — CFD: The Problem</div><p>Write the Navier-Stokes equations, explain each term. Reynolds number: laminar vs turbulent. Why we need numerical methods.</p></div>
+    <div class="outline-block"><div class="time">4:00 – 9:00 — Lattice Gas Automata</div><p>Boolean particles on a lattice. HPP and FHP models briefly. Streaming + collision (draw Boolean collision table). Problems: noise, Galilean invariance.</p></div>
+    <div class="outline-block"><div class="time">9:00 – 15:00 — LBM vs LGA</div><p>LBM: replace Boolean with real-valued fᵢ. BGK collision: smooth analytic formula. Show the comparison table. Noise comparison.</p></div>
+    <div class="outline-block"><div class="time">15:00 – 18:00 — What LBM Recovers</div><p>Moments → ρ and u. Recovering Navier-Stokes (Chapman-Enskog). Viscosity via τ.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Applications + Summary</div><p>Blood flow, heat convection, water column collapse. LBM is the modern standard for mesoscale CFD.</p></div>
+  </div>
+  <div class="tab-panel" id="q7-map">
+    <pre class="mind-map">
+              COMPUTATIONAL FLUID DYNAMICS
+                         |
+              Navier-Stokes Equations
+              ∂ₜu + (u·∇)u = -∇p/ρ + ν∆u
+              Nonlinear PDE → need numerics
+                         |
+               TWO MESOSCOPIC APPROACHES
+              ┌──────────┴───────────┐
+        LATTICE GAS (LGA)       LATTICE BOLTZMANN (LBM)
+        Boolean 0/1             Real-valued fᵢ
+        Lookup table collision  BGK: fᵢ - (fᵢ-feq)/τ
+        High noise              Low noise
+        Galilean violation      Galilean OK
+        HPP (square)            D2Q9 (square)
+        FHP (hexagonal)         τ controls viscosity
+              |
+         Both: Streaming + Collision
+         Both: recover N-S macroscopically
+         LBM = improved statistical limit of LGA
+    </pre>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="q-section" id="q8">
+  <div class="q-header">
+    <span class="q-badge">Q 8</span>
+    <div class="q-question">Barnes-Hut algorithm: purpose and details.</div>
+    <button class="done-btn" onclick="markDone('q8',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q8-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q8-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q8-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q8-answer">
+    <h4>The Problem: N-body</h4>
+    <p>N particles, each with mass mᵢ and position xᵢ. Force: F_ij = G·mᵢ·mⱼ / |xᵢ − xⱼ|².</p>
+    <p><strong>Naive</strong>: O(N²). N = 10⁶ → 10¹² operations → impractical.</p>
+    <h4>Key Insight</h4>
+    <p>Distant clusters of particles can be approximated as a <strong>single particle</strong> at the cluster's <strong>center of mass</strong> with the <strong>total mass</strong>.</p>
+    <p><strong>θ-criterion</strong>: if s/d &lt; θ → treat cluster as single particle (where s = bounding box size, d = distance to cluster center of mass, θ ≈ 0.5–1.0). Smaller θ = more accurate but slower.</p>
+    <h4>Algorithm</h4>
+    <p><strong>Step 1: Build the Tree</strong> (quadtree in 2D, octree in 3D)</p>
+    <pre>- Start with bounding box containing all particles
+- Recursively subdivide into quadrants
+- Each node stores: total mass M, center of mass X_com, bounding box
+- Subdivide until each leaf has ≤ 1 particle
+
+      ┌──┬──┐
+      │NW│NE│    Each quadrant subdivided recursively
+      ├──┼──┤    until 1 particle per cell
+      │SW│SE│
+      └──┴──┘</pre>
+    <p><strong>Step 2: Compute Force</strong> (traverse tree for each particle):</p>
+    <pre>function force(node, particle_i):
+    if node is leaf:
+        return direct force computation
+    compute s = node.size, d = distance(particle_i, node.center_of_mass)
+    if s/d &lt; θ:
+        return force using node's total mass   # APPROXIMATION
+    else:
+        return sum of force(child, particle_i) for each child  # RECURSE</pre>
+    <p><strong>Center of mass</strong>: M_node = Σmᵢ, X_com = (1/M) Σmᵢ·xᵢ</p>
+    <h4>Complexity</h4>
+    <table>
+      <tr><th>N</th><th>O(N²)</th><th>O(N log N)</th></tr>
+      <tr><td>10³</td><td>10⁶</td><td>~10⁴</td></tr>
+      <tr><td>10⁶</td><td>10¹²</td><td>~2×10⁷</td></tr>
+      <tr><td>10⁹</td><td>10¹⁸</td><td>~3×10¹⁰</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q8-outline">
+    <div class="outline-block"><div class="time">0:00 – 4:00 — The Problem</div><p>N-body: write the force formula. Naive O(N²): why it's unacceptable. Concrete numbers (N=10⁶ → 10¹² ops).</p></div>
+    <div class="outline-block"><div class="time">4:00 – 9:00 — The Key Idea</div><p>Distant cluster ≈ single particle at center of mass. The θ-criterion: s/d &lt; θ. Trade-off: θ small = accurate, θ large = fast.</p></div>
+    <div class="outline-block"><div class="time">9:00 – 15:00 — The Algorithm</div><p>Step 1: Build the quadtree (draw it for 8 particles). Show recursive subdivision. Each node stores M, X_com. Step 2: Force computation (traverse tree). Show decision: far? → approximate; close? → recurse.</p></div>
+    <div class="outline-block"><div class="time">15:00 – 18:00 — Complexity Analysis</div><p>Tree depth = log N. N particles × log N per particle = O(N log N). Comparison table.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Summary</div><p>Barnes-Hut is the standard for astrophysical simulations (galaxy formation). θ is the key tuning parameter: accuracy vs speed.</p></div>
+  </div>
+  <div class="tab-panel" id="q8-map">
+    <pre class="mind-map">
+           BARNES-HUT ALGORITHM
+                   |
+       ┌───────────┴────────────┐
+    PROBLEM               SOLUTION
+    N-body forces          Approximate
+    O(N²) naive            distant clusters
+    F=Gm₁m₂/r²            as single particle
+                                |
+                      θ-CRITERION
+                      s/d &lt; θ → approximate
+                      s/d ≥ θ → recurse
+                           |
+                    BUILD QUADTREE
+                    Recursive subdivision
+                    Until 1 particle/cell
+                    Each node: M, X_com
+                           |
+                    TRAVERSE TREE
+                    For each particle i:
+                    Check θ at each node
+                    Approximate or recurse
+                           |
+                    COMPLEXITY
+                    O(N log N)
+                    vs O(N²) naive
+                    Dramatic speedup!
+    </pre>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="q-section" id="q9">
+  <div class="q-header">
+    <span class="q-badge">Q 9</span>
+    <div class="q-question">Three inter-particle potentials (Gravity, Coulomb, Lennard-Jones). Algorithmic complexity and workarounds.</div>
+    <button class="done-btn" onclick="markDone('q9',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q9-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q9-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q9-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q9-answer">
+    <h4>Gravity</h4>
+    <div class="formula">V_grav(r) = −G·m₁·m₂ / r &nbsp;&nbsp;&nbsp; F = G·m₁·m₂ / r²</div>
+    <p>Gravity is a <strong>long-range</strong> potential that decays only as 1/r, meaning every particle in the system exerts a non-negligible force on every other particle regardless of separation. It is always attractive — there is no gravitational repulsion. As a result, the naive all-pairs computation (evaluating every pair (i, j) separately) scales as <strong>O(N²)</strong>. For N = 10⁶ particles this requires 10¹² force evaluations — completely intractable. Several algorithms exploit the smoothness of the gravitational field at large distances to reduce this cost:</p>
+    <ul>
+      <li><strong>Barnes-Hut</strong>: Recursively groups distant particles into clusters and approximates each cluster as a single point mass at its center of mass, achieving O(N log N) time. The θ-criterion (s/d &lt; θ) controls the accuracy-speed trade-off (see Q8 for full details).</li>
+      <li><strong>Fast Multipole Method (FMM)</strong>: Uses a hierarchical multipole expansion to compute all gravitational interactions to arbitrary precision in O(N) time — the theoretically optimal scaling, though with a larger constant factor than Barnes-Hut.</li>
+      <li><strong>Particle-Mesh</strong>: Projects masses onto a regular grid, solves Poisson's equation for the potential via FFT, and interpolates forces back to particle positions. Also O(N log N) but with excellent practical performance on uniform distributions.</li>
+    </ul>
+    <h4>Coulomb (Electrostatic)</h4>
+    <div class="formula">V_Coulomb(r) = k·q₁·q₂ / r &nbsp;&nbsp;&nbsp; F = k·q₁·q₂ / r²</div>
+    <p>The Coulomb potential has exactly the same 1/r form as gravity, making it equally long-range — every charge interacts with every other charge in the system. The critical difference is that Coulomb forces can be both <strong>attractive</strong> (opposite charges: q₁q₂ &lt; 0) and <strong>repulsive</strong> (like charges: q₁q₂ &gt; 0). The naive all-pairs computation again scales as <strong>O(N²)</strong>. For large molecular dynamics simulations, the same tree-based algorithms apply, plus one additional technique that is standard practice:</p>
+    <ul>
+      <li><strong>Barnes-Hut and FMM</strong>: Directly applicable here as for gravity, grouping distant charge clusters into multipole approximations of the electrostatic potential.</li>
+      <li><strong>Ewald Summation</strong>: The go-to method for molecular dynamics with <em>periodic boundary conditions</em>. The conditionally convergent long-range sum is split into two absolutely convergent parts: a short-range contribution computed directly in real space (decays fast due to a Gaussian screening function), and a long-range contribution computed efficiently in Fourier (reciprocal) space using FFT. This decomposition makes periodic electrostatics tractable and is the standard technique implemented in packages such as GROMACS and NAMD for biomolecular simulations.</li>
+    </ul>
+    <h4>Lennard-Jones</h4>
+    <div class="formula">V_LJ(r) = 4ε [(σ/r)¹² − (σ/r)⁶]</div>
+    <ul>
+      <li>ε = depth of potential well; σ = particle diameter</li>
+      <li>(σ/r)¹² = repulsive (Pauli exclusion, very short-range)</li>
+      <li>(σ/r)⁶ = attractive (Van der Waals)</li>
+      <li>r = 2^{1/6}σ: equilibrium (energy minimum)</li>
+    </ul>
+    <div class="highlight-box"><div class="label">Key Difference</div>LJ is <strong>short-range</strong> — decays as r⁻⁶. At r &gt; 2.5σ, potential is negligible (&lt;1.6% of ε). This enables cutoff-based O(N) algorithms!</div>
+    <ul>
+      <li><strong>Cutoff radius</strong> r_c = 2.5σ: simply ignore all pairs where r &gt; r_c</li>
+      <li><strong>Verlet neighbor list</strong>: pre-compute neighbors within r_c + r_skin, reuse for multiple steps</li>
+      <li><strong>Linked-cell method</strong>: divide box into cells of size ≥ r_c; only check adjacent cells (27 in 3D) → O(N)</li>
+    </ul>
+    <table>
+      <tr><th>Potential</th><th>Form</th><th>Range</th><th>Complexity</th><th>Workaround</th></tr>
+      <tr><td>Gravity</td><td>−Gm₁m₂/r</td><td>Long (1/r)</td><td>O(N²)</td><td>Barnes-Hut O(N log N), FMM O(N)</td></tr>
+      <tr><td>Coulomb</td><td>kq₁q₂/r</td><td>Long (1/r)</td><td>O(N²)</td><td>Barnes-Hut, FMM, Ewald sum</td></tr>
+      <tr><td>Lennard-Jones</td><td>4ε[(σ/r)¹²−(σ/r)⁶]</td><td>Short (r⁻⁶)</td><td>O(N²)</td><td>Cutoff, neighbor lists, cell lists → O(N)</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q9-outline">
+    <div class="outline-block"><div class="time">0:00 – 2:00 — Setup</div><p>General problem: N particles, every pair interacts. Naive O(N²): show it's intractable for large N.</p></div>
+    <div class="outline-block"><div class="time">2:00 – 7:00 — Gravity</div><p>Write formula, draw the 1/r curve. Long-range → can't cut off. Barnes-Hut (reference Q8), FMM briefly.</p></div>
+    <div class="outline-block"><div class="time">7:00 – 12:00 — Coulomb</div><p>Write formula, note: +/− charges unlike gravity. Same 1/r → same workarounds. Ewald summation for periodic boxes (MD simulations).</p></div>
+    <div class="outline-block"><div class="time">12:00 – 18:00 — Lennard-Jones</div><p>Write formula, DRAW the curve (repulsive + attractive). Label: equilibrium distance, σ, ε. Key advantage: SHORT range → cutoff r_c = 2.5σ works. Neighbor lists and cell lists: O(N).</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Comparison Table</div><p>Long vs short range is the key distinction. Real-world: LJ for MD; gravity/Coulomb for astrophysics/plasma.</p></div>
+  </div>
+  <div class="tab-panel" id="q9-map">
+    <pre class="mind-map">
+         INTER-PARTICLE POTENTIALS
+                    |
+       ┌────────────┼────────────┐
+    GRAVITY     COULOMB    LENNARD-JONES
+    -Gm₁m₂/r   kq₁q₂/r   4ε[(σ/r)¹²-(σ/r)⁶]
+    Always      +/- charges  Repulsive + attractive
+    attractive  1/r form     Short-range (r⁻⁶)
+    Long-range  Long-range
+       |            |             |
+    Can't        Can't          CAN cutoff!
+    cutoff       cutoff         r_c = 2.5σ
+       |            |             |
+   Barnes-Hut   Barnes-Hut    Cutoff radius
+   O(N log N)   FMM O(N)     Neighbor lists
+   FMM O(N)     Ewald sum    Cell lists → O(N)
+                (periodic BC)
+    ALL start at naive O(N²)
+    </pre>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="q-section" id="q10">
+  <div class="q-header">
+    <span class="q-badge">Q 10</span>
+    <div class="q-question">What are agent-based models? Agent types, behavior, implementations, examples.</div>
+    <button class="done-btn" onclick="markDone('q10',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q10-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q10-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q10-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q10-answer">
+    <h4>What is an ABM?</h4>
+    <p>An <strong>Agent-Based Model</strong> simulates a system as a collection of autonomous <strong>agents</strong> interacting with each other and their environment according to local rules. Fundamental principle: <strong>emergence</strong> — complex global patterns from simple local interactions. No central controller.</p>
+    <ul>
+      <li><strong>Autonomy</strong>: each agent acts independently</li>
+      <li><strong>Heterogeneity</strong>: agents can have different properties</li>
+      <li><strong>Local interactions</strong>: agents only interact with neighbors</li>
+      <li><strong>Emergence</strong>: macro-level patterns not explicitly programmed</li>
+    </ul>
+    <h4>Types of Agents</h4>
+    <table>
+      <tr><th>Type</th><th>Description</th><th>Example</th></tr>
+      <tr><td><strong>Simple Reflex</strong></td><td>IF [condition] THEN [action]. No memory.</td><td>Thermostat, Game of Life cell</td></tr>
+      <tr><td><strong>Model-Based (Reactive)</strong></td><td>Maintains internal state / world model, uses memory</td><td>Ant with pheromone memory</td></tr>
+      <tr><td><strong>Goal-Based</strong></td><td>Has goals, plans actions, reasons about consequences</td><td>Schelling agent deciding to move</td></tr>
+      <tr><td><strong>Utility-Based</strong></td><td>Maximizes a utility function, strategic behavior</td><td>Economic agents, game theory</td></tr>
+    </table>
+    <h4>Agent Behavior Loop</h4>
+    <p>At each time step, every agent executes the same three-phase cycle:</p>
+    <pre>At each time step:
+  1. PERCEIVE: observe environment (neighbors' states)
+  2. DECIDE: apply decision rule
+  3. ACT: update state, move, communicate</pre>
+    <p>The <strong>PERCEIVE</strong> phase restricts each agent to local information only — typically the states of nearby neighbors rather than the global configuration. This constraint is what makes ABMs genuinely bottom-up: no agent can "see" the emergent pattern they collectively create. The <strong>DECIDE</strong> phase applies the agent's rule or policy to the perceived information (this can be a simple if-then rule, or a utility-maximizing calculation). The <strong>ACT</strong> phase carries out the chosen action, which may change the agent's own state, its position in space, or the states of neighbors through communication or physical contact.</p>
+    <h4>Update Scheduling</h4>
+    <p>A critical and often overlooked design choice in ABMs is the <strong>update schedule</strong> — the order in which agents are processed within each time step. This seemingly minor detail can qualitatively change the model's outcomes:</p>
+    <ul>
+      <li><strong>Synchronous (parallel)</strong>: All agents perceive the world based on the <em>previous</em> time step's states, make their decisions simultaneously, and all act at once. Well-defined, reproducible, and easy to analyze mathematically — but can produce artifacts (e.g., two agents simultaneously deciding to occupy the same cell).</li>
+      <li><strong>Asynchronous (random sequential)</strong>: At each time step, one agent is selected at random and fully updated (perceive → decide → act) before the next agent is selected. Repeated N times so that on average each agent acts once per step. More biologically and socially realistic since interactions happen one at a time — but results can differ substantially from the synchronous case, and the random order introduces stochasticity even in otherwise deterministic rules.</li>
+    </ul>
+    <pre>agents = [Agent(random_position(), random_state()) for _ in range(N)]
+for t in range(T_max):
+    for agent in agents:
+        neighbors = get_neighbors(agent, agents)
+        agent.decide(neighbors)
+    for agent in agents:
+        agent.update()   # synchronous: update after all decisions</pre>
+    <h4>Examples</h4>
+    <p><strong>Conway's Game of Life</strong>: Grid cells ON/OFF. Rules (Moore 8-neighborhood): dead cell with exactly 3 live neighbors → alive; live cell with 2 or 3 → survives; otherwise dies. Produces: oscillators, gliders, complex structures.</p>
+    <p><strong>Boids (Reynolds, 1987)</strong>: 3 rules: (1) <em>Separation</em> — avoid crowding; (2) <em>Alignment</em> — match heading of neighbors; (3) <em>Cohesion</em> — move toward average position. Result: emergent flocking with no global controller.</p>
+    <p><strong>Ant Colony Optimization</strong>: Ants deposit pheromone on path to food. Others follow gradients. Pheromone evaporates. Short paths accumulate more → positive feedback → optimal path emerges.</p>
+  </div>
+  <div class="tab-panel" id="q10-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — What is ABM?</div><p>Bottom-up approach: local rules → global patterns. Key word: EMERGENCE. Contrast with top-down (equation-based) models.</p></div>
+    <div class="outline-block"><div class="time">3:00 – 8:00 — Types of Agents</div><p>Walk through the 4 types: reflex → reactive → goal → utility. Give 1 example for each. Most course models use simple reflex agents.</p></div>
+    <div class="outline-block"><div class="time">8:00 – 13:00 — Behavior &amp; Implementation</div><p>The perceive-decide-act loop. Synchronous vs asynchronous update — show they give different results. Show pseudocode structure.</p></div>
+    <div class="outline-block"><div class="time">13:00 – 18:00 — Examples</div><p>Game of Life: draw the rules, show an oscillator and a glider. Boids: 3 rules → flocking (draw the 3 behaviors). Ants: pheromone → shortest path.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Summary</div><p>ABM is ideal when: no known macro equation, individual heterogeneity matters, emergence is expected. Limitation: hard to analyze mathematically.</p></div>
+  </div>
+  <div class="tab-panel" id="q10-map">
+    <pre class="mind-map">
+              AGENT-BASED MODELS
+                      |
+         ┌────────────┼────────────┐
+      AGENTS        BEHAVIOR      EXAMPLES
+      Autonomous    Perceive      Game of Life
+      Heterogeneous  → Decide     Boids (flocking)
+      Local rules    → Act        Ant colony
+         |              |
+    TYPES           UPDATE
+    Reflex          Synchronous
+    Reactive         (all at once)
+    Goal-based      Asynchronous
+    Utility          (random order)
+         |
+      EMERGENCE
+      Local rules →
+      Global patterns
+      NOT programmed!
+      (no central control)
+    </pre>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="q-section" id="q11">
+  <div class="q-header">
+    <span class="q-badge">Q 11</span>
+    <div class="q-question">Agent model spatial aspects: topologies, neighborhoods. Different approaches and consequences.</div>
+    <button class="done-btn" onclick="markDone('q11',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q11-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q11-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q11-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q11-answer">
+    <h4>Why Topology Matters</h4>
+    <p>The <strong>topology</strong> (how agents are connected or arranged) fundamentally shapes which agents interact, how states propagate, the patterns that emerge, and speed of convergence. <strong>Same local rules + different topology = different emergent behaviors.</strong></p>
+    <h4>Space Representations</h4>
+    <p>How you represent space is one of the most consequential modeling decisions in an ABM — it determines which agents can interact, how information and states propagate, and what kinds of patterns can emerge:</p>
+    <ul>
+      <li><strong>Regular Grid (Lattice)</strong>: Space is divided into a discrete 2D grid of cells (square, hexagonal, or triangular lattice). Each agent occupies one cell and can only interact with agents in neighboring cells. Simple to implement and well-studied mathematically. The geometry of the lattice affects spreading patterns — a square grid produces anisotropic (diamond-shaped) fronts with Von Neumann neighborhoods.</li>
+      <li><strong>Continuous Space</strong>: Agents have real-valued positions (x, y) ∈ ℝ² and interact with all other agents within a specified Euclidean radius r. This is more physically realistic and allows smooth, density-varying distributions. Used in Boids (flocking), particle simulations, and predator-prey models with explicit movement.</li>
+      <li><strong>Network Topology</strong>: There is no geometric space at all — agents are nodes in a graph and can only interact with their direct graph neighbors (connected by edges). This is the correct representation for social dynamics where "who you interact with" is determined by social ties, not physical proximity. Examples: opinion dynamics, disease spreading on a contact network (ER, WS, or BA).</li>
+      <li><strong>No Space (Mean-Field)</strong>: Every agent interacts equally with every other, as if all are uniformly mixed in a single container. This corresponds to the ODE limit (e.g., the SIR compartmental model). Analytically tractable and yields clean equations, but ignores all spatial structure, clustering, and local correlations — often the least realistic assumption.</li>
+    </ul>
+    <h4>Neighborhood Definitions</h4>
+    <pre>Von Neumann (4 neighbors):     Moore (8 neighbors):
+      [ ]                       [X][X][X]
+    [X][C][X]                   [X][C][X]
+      [X]                       [X][X][X]
+N, S, E, W only                + diagonals</pre>
+    <ul>
+      <li><strong>Von Neumann</strong>: used in HPP lattice gas, some CA. More anisotropic.</li>
+      <li><strong>Moore</strong>: used in Game of Life, Schelling. More isotropic.</li>
+      <li><strong>Extended Moore (radius r)</strong>: r=1 → 8 neighbors; r=2 → 24 neighbors. Larger r → more smoothing.</li>
+      <li><strong>Metric (continuous space)</strong>: all agents within Euclidean distance r.</li>
+    </ul>
+    <h4>Boundary Conditions</h4>
+    <p>What happens at the edges of a finite simulation domain is a modeling choice that can significantly affect results, especially for small grids where edge agents make up a large fraction of the population:</p>
+    <ul>
+      <li><strong>Periodic (toroidal)</strong>: The left edge is connected to the right edge, and the top to the bottom, forming a torus. An agent leaving one side immediately re-enters from the opposite side. This effectively simulates an infinite or periodically tiled system, eliminating artificial edge effects. The most common choice in ABM and lattice simulations.</li>
+      <li><strong>Fixed/Walled</strong>: The grid has hard boundaries that agents cannot cross. Agents at the edges have fewer neighbors than interior agents (corner agents may have only 2 neighbors instead of 8 in a Moore neighborhood). This introduces boundary effects that can distort results for small systems, but is appropriate when the walls have physical meaning (e.g., the walls of a room, the border of a city).</li>
+      <li><strong>Reflective</strong>: Agents or signals that reach the boundary are reflected back symmetrically, as if by a mirror. Used in some physical simulations where the boundary represents a repulsive wall or a symmetry plane. Equivalent to extending the domain by mirroring it at each boundary.</li>
+    </ul>
+    <h4>Topology Consequences</h4>
+    <table>
+      <tr><th>Topology</th><th>Effect</th></tr>
+      <tr><td>Von Neumann</td><td>Anisotropy (diamond-shaped fronts)</td></tr>
+      <tr><td>Moore</td><td>More isotropic spreading (circular fronts)</td></tr>
+      <tr><td>Periodic boundaries</td><td>No edge effects; uniform behavior</td></tr>
+      <tr><td>Network (WS)</td><td>Fast information spread (short paths)</td></tr>
+      <tr><td>Network (BA)</td><td>Hubs dominate dynamics</td></tr>
+      <tr><td>Continuous space</td><td>Natural density variations</td></tr>
+    </table>
+  </div>
+  <div class="tab-panel" id="q11-outline">
+    <div class="outline-block"><div class="time">0:00 – 3:00 — Why Topology Matters</div><p>Same rules, different topology → different outcomes. Motivate with: what does "neighbor" mean?</p></div>
+    <div class="outline-block"><div class="time">3:00 – 8:00 — Space Representations</div><p>Grid, continuous space, network, no space (mean field). For each: draw a picture, give an example.</p></div>
+    <div class="outline-block"><div class="time">8:00 – 13:00 — Neighborhood Definitions</div><p>Draw Von Neumann (4) vs Moore (8) on whiteboard. Extended Moore for radius r. Metric (continuous). Effect: Von Neumann → anisotropy; Moore → isotropic.</p></div>
+    <div class="outline-block"><div class="time">13:00 – 17:00 — Boundary Conditions</div><p>Periodic (torus): most common, eliminates edges. Walled: edge effects. Draw the torus wrapping.</p></div>
+    <div class="outline-block"><div class="time">17:00 – 20:00 — Consequences with Examples</div><p>Fire spreading: diamond (VN) vs circle (Moore). Schelling: grid vs BA network. SIR: WS vs BA. Key message: topology is a modeling choice with real consequences.</p></div>
+  </div>
+  <div class="tab-panel" id="q11-map">
+    <pre class="mind-map">
+              SPATIAL ASPECTS OF ABMs
+                       |
+            ┌──────────┼──────────┐
+         SPACE         NEIGH-     BOUNDARY
+       REPR.           BORHOOD    CONDITIONS
+      Grid (lattice)  Von Neumann Periodic (torus)
+      Continuous       4 neighbors No edge effects
+      Network          Moore       Fixed/Walled
+      No space         8 neighbors Edge effects
+      (mean field)     Metric (r)  Reflective
+           |               |
+      TOPOLOGY MATTERS:  CONSEQUENCES
+      same rules,        Anisotropy (VN)
+      different space    Isotropy (Moore)
+      → different result Hubs dominate (BA)
+                         Clustering (WS)
+           |
+        EXAMPLES
+        Fire: diamond vs circle
+        Schelling: grid vs network
+        Epidemic: WS vs BA
+    </pre>
+  </div>
+</div>
+
+<!-- Q12 -->
+<div class="q-section" id="q12">
+  <div class="q-header">
+    <span class="q-badge">Q 12</span>
+    <div class="q-question">Challenges of modeling social systems. Schelling model. Opinion dynamics on networks.</div>
+    <button class="done-btn" onclick="markDone('q12',this)">Mark Done</button>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'q12-answer')">Full Answer</button>
+    <button class="tab-btn" onclick="switchTab(this,'q12-outline')">20-min Outline</button>
+    <button class="tab-btn" onclick="switchTab(this,'q12-map')">Mind Map</button>
+  </div>
+  <div class="tab-panel active" id="q12-answer">
+    <h4>Challenges of Modeling Social Systems</h4>
+    <p>Social systems differ fundamentally from natural (physical) systems:</p>
+    <ul>
+      <li><strong>Reflexivity</strong>: Agents KNOW they are being modeled → they react to the model. A weather model doesn't change the weather; an economic model can change markets.</li>
+      <li><strong>Non-stationarity</strong>: Rules change over time. Norms, institutions, laws evolve. (Gravity is always F=Gm₁m₂/r².)</li>
+      <li><strong>Heterogeneity + Cognition</strong>: Humans have beliefs, preferences, bounded rationality — not interchangeable particles.</li>
+      <li><strong>Memory &amp; Learning</strong>: Past experiences shape present behavior; path dependency matters.</li>
+      <li><strong>Feedback Loops</strong>: Individual behavior shapes social structures; structures constrain behavior → tipping points, cascades, lock-ins.</li>
+      <li><strong>No Closed-Form Equation</strong>: Simulation is necessary to test mechanisms.</li>
+    </ul>
+    <h4>Schelling Spatial Segregation Model (1971)</h4>
+    <p>Thomas Schelling (Nobel 2005): Can mild preferences for similar neighbors generate strong residential segregation?</p>
+    <p><strong>Setup</strong>: 2D grid (e.g., 50×50). Two types: Red and Blue + empty cells. Each agent has tolerance threshold τ ∈ [0,1].</p>
+    <p><strong>Local rule</strong>: (1) Pick agent at random. (2) Count fraction f_s of same-type neighbors. (3) If f_s &lt; τ → unhappy → moves to random empty cell. (4) Else → stays.</p>
+    <p><strong>Results (tipping points)</strong>:</p>
+    <ul>
+      <li>τ ≤ 0.25: well-mixed equilibrium</li>
+      <li>0.30 ≤ τ ≤ 0.50: <strong>clear segregated clusters emerge spontaneously</strong></li>
+      <li>τ ≥ 0.75: no equilibrium (everyone always unhappy)</li>
+    </ul>
+    <div class="highlight-box"><div class="label">The Surprise</div>Agents who are happy with 30% same-type neighbors end up in neighborhoods that are <strong>70–80% same-type!</strong> Each move destabilizes formerly happy neighbors → cascade. Tiny biases → large effects. <strong>Micro ≠ Macro</strong>.</div>
+    <h4>Opinion Dynamics</h4>
+    <p><strong>Voter Model</strong> (discrete opinions {0,1}): Pick random agent i → i adopts opinion of a random neighbor j. No threshold. Consensus in O(N) steps on complete graph; O(N²) on regular lattice; faster on scale-free (hubs lock in).</p>
+    <p><strong>Deffuant (Bounded Confidence)</strong>: Opinions xᵢ ∈ [0,1]. Agents i, j interact only if |xᵢ − xⱼ| &lt; ε. Update: xᵢ ← xᵢ + μ(xⱼ − xᵢ). Small ε → many clusters (fragmentation); large ε → consensus. Models echo chambers.</p>
+    <table>
+      <tr><th>Network</th><th>Effect</th></tr>
+      <tr><td>Complete graph</td><td>Fast mixing, consensus likely</td></tr>
+      <tr><td>WS (small-world)</td><td>Clustering creates opinion bubbles; shortcuts allow global spread</td></tr>
+      <tr><td>BA (scale-free)</td><td>Hubs strongly influence dynamics; minority hubs can dominate</td></tr>
+    </table>
+    <p><strong>Social Network Analysis (SNA)</strong>: <em>Weak ties</em> (Granovetter 1973): novel information arrives via acquaintances, not close friends — weak ties are bridges to other groups. <em>Structural holes</em> (Burt 1992): brokers spanning gaps between groups gain "social capital" — these are high-betweenness nodes.</p>
+  </div>
+  <div class="tab-panel" id="q12-outline">
+    <div class="outline-block"><div class="time">0:00 – 4:00 — Challenges of Social Systems</div><p>List and explain: reflexivity, non-stationarity, cognition, memory. Key contrast: "particles obey forces; people decide." Why simulation instead of equations?</p></div>
+    <div class="outline-block"><div class="time">4:00 – 12:00 — Schelling Model</div><p>Setup: grid, two types, tolerance τ. Walk through one step. Show the 3 regimes. The surprise: happy at 30%, end up 70% same-type. Tipping point / cascade explanation. Take-home: micro ≠ macro.</p></div>
+    <div class="outline-block"><div class="time">12:00 – 18:00 — Opinion Dynamics</div><p>Voter model: simple, any contact changes opinion. Deffuant: bounded confidence ε. Show what ε controls (consensus vs fragmentation). Network effects: BA hubs, WS echo chambers.</p></div>
+    <div class="outline-block"><div class="time">18:00 – 20:00 — Wrap-Up</div><p>Schelling: benign rules → alarming outcomes. Key terms: emergence, tipping point, homophily, echo chambers, weak ties.</p></div>
+  </div>
+  <div class="tab-panel" id="q12-map">
+    <pre class="mind-map">
+         MODELING SOCIAL SYSTEMS
+                   |
+        ┌──────────┴──────────┐
+    CHALLENGES             TOOLS
+    Reflexivity            ABM
+    Non-stationarity       Networks (SNA)
+    Cognition              Opinion models
+    Feedback loops
+    No closed equation
+                   |
+        ┌──────────┴──────────┐
+  SCHELLING MODEL       OPINION DYNAMICS
+  Grid, Red/Blue, τ     Voter model
+  f_s &lt; τ → move        Deffuant (ε)
+                              |
+  Results:             Network effects:
+  τ&lt;0.25: mixed        BA: hubs dominate
+  τ≈0.30: SEGREGATED!  WS: echo chambers
+  τ&gt;0.75: no equil.    Homophily
+                        Weak ties (Granovetter)
+  THE SURPRISE:
+  Happy@30% →
+  Live@70% same-type
+  Micro ≠ Macro!
+  Cascade dynamics
+    </pre>
+  </div>
+</div>
+
+<!-- Cheat Sheet -->
+<div class="q-section" id="cheatsheet">
+  <div class="q-header">
+    <span class="q-badge" style="background:#f59e0b">⚡</span>
+    <div class="q-question">One-Page Cheat Sheet <em>Key formulas and facts for all 12 questions</em></div>
+  </div>
+  <div class="tab-panel active" style="display:block">
+    <div class="cheat-q"><div class="label">Q1 — Describing Systems</div><div class="content">Model = state vars + params + rules. Time: continuous dx/dt=f / discrete x(n+1)=f(x). IC = state at t=0. BC: Dirichlet(fixed val), Neumann(fixed flux), Periodic. Need many approaches: different scales, phenomena, costs.</div></div>
+    <div class="cheat-q"><div class="label">Q2 — Dynamical Systems</div><div class="content">Fixed pt: f(x*)=0 or f(x*)=x*. Stability: eigenvalues Re&lt;0 stable, Re&gt;0 unstable. Limit cycle: closed orbit (Lotka-Volterra). Chaos: SDIC, λ&gt;0 (Lyapunov), Lorenz attractor. Logistic map: r&gt;3.57→chaos.</div></div>
+    <div class="cheat-q"><div class="label">Q3 — Balance Equation &amp; Numerics</div><div class="content">dQ/dt = in − out + source − sink. SIR: dS/dt=−βSI/N, dI/dt=βSI/N−γI. Euler fwd: x+Δt·f(x), Order 1, unstable if Δt too large. Euler bwd: implicit, stable. RK4: 4 slopes, order 4, gold standard.</div></div>
+    <div class="cheat-q"><div class="label">Q4 — Graphs</div><div class="content">G=(V,E), N nodes, L edges. k_i=ΣAij. ⟨k⟩=2L/N. Adj matrix A∈{0,1}^NxN. Clustering C_i=triangles/possible. Small-world: high C + small L~logN (WS model). P(k): Poisson(ER, no hubs) vs Power-law k^-γ (BA, hubs).</div></div>
+    <div class="cheat-q"><div class="label">Q5 — Building Graphs</div><div class="content">ER: G(N,p), random edges. WS: ring+rewire with p. BA: pref. attachment k_i/Σk_j. SIR on network: each I infects S-neighbor with β; recovers with γ. R₀=β⟨k⟩/γ. BA: no threshold! (scale-free hubs).</div></div>
+    <div class="cheat-q"><div class="label">Q6 — LBM</div><div class="content">D2Q9: 9 velocity directions, store fᵢ(x,t). ρ=Σfᵢ, ρu=Σfᵢeᵢ. BGK: fᵢ(x+eδt,t+δt)=fᵢ−(1/τ)(fᵢ−fᵢeq). Steps: COLLISION(local, relax to feq) + STREAMING(propagate). Viscosity ν=cs²(τ−0.5). Bounce-back=no-slip wall.</div></div>
+    <div class="cheat-q"><div class="label">Q7 — CFD &amp; LGA vs LBM</div><div class="content">CFD: simulate Navier-Stokes: ∂ₜu+(u·∇)u=−∇p/ρ+ν∆u, Re=UL/ν. LGA: Boolean 0/1, lookup table collision, noisy, Galilean violated (FHP hex grid). LBM: real-valued fᵢ, BGK analytic collision, much less noise, recovers N-S.</div></div>
+    <div class="cheat-q"><div class="label">Q8 — Barnes-Hut</div><div class="content">Solve N-body O(N²)→O(N log N). Key: s/d&lt;θ → approximate cluster as point mass at center of mass. Build quadtree(2D)/octree(3D) recursively. For each particle: traverse tree, apply θ-criterion at each node.</div></div>
+    <div class="cheat-q"><div class="label">Q9 — Potentials</div><div class="content">Gravity: −Gm₁m₂/r, long-range → Barnes-Hut O(NlogN), FMM O(N). Coulomb: kq₁q₂/r, long-range, +/− → Barnes-Hut, FMM, Ewald(periodic BC). LJ: 4ε[(σ/r)¹²−(σ/r)⁶], short-range → cutoff r_c=2.5σ, neighbor lists, cell lists→O(N).</div></div>
+    <div class="cheat-q"><div class="label">Q10 — ABM</div><div class="content">Autonomous agents + local rules → emergent global patterns. Types: reflex(if-then) / reactive(memory) / goal(deliberate) / utility(optimize). Perceive→Decide→Act. Sync vs Async update (order matters!). Game of Life (3 dead→alive; 2–3 live→survive), Boids (sep+align+cohesion).</div></div>
+    <div class="cheat-q"><div class="label">Q11 — ABM Spatial</div><div class="content">Space: grid(lattice), continuous, network, mean-field. Neighborhoods: Von Neumann(4) vs Moore(8, includes diagonals). BC: periodic(torus)=no edges, walled=edge effects, reflective. Topology effects: VN→anisotropy, Moore→isotropic, BA→hubs, WS→echo chambers.</div></div>
+    <div class="cheat-q"><div class="label">Q12 — Social Systems</div><div class="content">Challenges: reflexivity, non-stationarity, cognition, feedback, no equation. Schelling: grid+τ+Moore neigh. f_s&lt;τ→move. τ≈0.30→segregation! Happy@30% → live in 70% same-type. Cascade amplifies tiny bias. Micro≠macro. Opinion dynamics: Voter(copy neighbor) / Deffuant(bounded conf. ε). SNA: weak ties=novel info, structural holes=brokers.</div></div>
+  </div>
+</div>
+
+<!-- Strategy -->
+<div class="q-section" id="strategy">
+  <div class="q-header">
+    <span class="q-badge" style="background:#8b5cf6">🎯</span>
+    <div class="q-question">Presentation Strategy for the Oral Exam <em>Structure for any 20-minute answer</em></div>
+  </div>
+  <div class="tab-panel active" style="display:block">
+    <h4>Universal Structure (Any Question)</h4>
+    <div class="strategy-phase"><div class="phase-time">0:00 – 2:00 — CONTEXT</div><p>Why does this question matter? Real-world motivation. Hook the examiner.</p></div>
+    <div class="strategy-phase"><div class="phase-time">2:00 – 8:00 — CORE CONCEPTS</div><p>Define the key terms clearly and precisely. Use mathematical notation from the start.</p></div>
+    <div class="strategy-phase"><div class="phase-time">8:00 – 14:00 — MECHANISM/ALGORITHM</div><p>Explain the "how." Use the whiteboard heavily. Boxes + arrows for processes.</p></div>
+    <div class="strategy-phase"><div class="phase-time">14:00 – 18:00 — EXAMPLE</div><p>Work through 1–2 concrete examples. This is where you demonstrate you actually understand.</p></div>
+    <div class="strategy-phase"><div class="phase-time">18:00 – 20:00 — SUMMARY + LIMITATIONS</div><p>Recap key points. What does the model NOT do? Shows depth of understanding.</p></div>
+    <h4 style="margin-top:20px">Whiteboard Tips</h4>
+    <ul>
+      <li>Start with a <strong>diagram</strong>, not equations</li>
+      <li>Use boxes + arrows for processes/algorithms</li>
+      <li>Write key formulas only <em>after</em> explaining the concept verbally</li>
+      <li>Leave space to add details as you talk</li>
+    </ul>
+    <h4>Strongest Questions to Prepare First</h4>
+    <table>
+      <tr><th>Priority</th><th>Question</th><th>Why</th></tr>
+      <tr><td>🔥 High</td><td>Q6/Q7 — LBM/CFD</td><td>Very specific technical content, unique to this course</td></tr>
+      <tr><td>🔥 High</td><td>Q12 — Schelling</td><td>Beautiful emergent result, great story to tell</td></tr>
+      <tr><td>⚡ Medium</td><td>Q2 — Dynamical Systems</td><td>Fundamental — likely to be asked as follow-up on ANY other question</td></tr>
+      <tr><td>⚡ Medium</td><td>Q8/Q9 — Particles</td><td>Clean algorithmic complexity argument</td></tr>
+    </table>
+  </div>
+</div>
+
+</main>
+
+<script>
+// Theme
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.querySelector('.theme-toggle').textContent = isDark ? '🌙 Toggle Dark Mode' : '☀️ Toggle Light Mode';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+
+// Tab switching
+function switchTab(btn, panelId) {
+  const section = btn.closest('.q-section');
+  section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  section.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+}
+
+// Navigation
+function navClick(el, id) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Progress tracking
+const DONE_KEY = 'ms_done_questions';
+function getDone() {
+  try { return JSON.parse(localStorage.getItem(DONE_KEY)) || []; } catch { return []; }
+}
+function saveDone(arr) {
+  localStorage.setItem(DONE_KEY, JSON.stringify(arr));
+}
+function markDone(qid, btn) {
+  let done = getDone();
+  if (done.includes(qid)) {
+    done = done.filter(d => d !== qid);
+    btn.textContent = 'Mark Done';
+    btn.classList.remove('marked');
+  } else {
+    done.push(qid);
+    btn.textContent = '✓ Done';
+    btn.classList.add('marked');
+  }
+  saveDone(done);
+  updateProgress(done);
+}
+function updateProgress(done) {
+  const total = 12;
+  const count = done.filter(d => d.startsWith('q')).length;
+  document.getElementById('progress-text').textContent = count + ' / ' + total;
+  document.getElementById('progress-fill').style.width = (count / total * 100) + '%';
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const href = item.getAttribute('href');
+    if (href) {
+      const qid = href.replace('#', '');
+      if (done.includes(qid)) {
+        item.classList.add('done');
+      } else {
+        item.classList.remove('done');
+      }
+    }
+  });
+}
+
+// Restore state on load
+window.addEventListener('DOMContentLoaded', () => {
+  const theme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️ Toggle Light Mode' : '🌙 Toggle Dark Mode';
+
+  const done = getDone();
+  done.forEach(qid => {
+    const btn = document.querySelector(`#${qid} .done-btn`);
+    if (btn) { btn.textContent = '✓ Done'; btn.classList.add('marked'); }
+  });
+  updateProgress(done);
+
+  // Sidebar active state on scroll
+  const sections = document.querySelectorAll('.q-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        const link = document.querySelector(`.nav-item[href="#${id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { threshold: 0.3 });
+  sections.forEach(s => observer.observe(s));
+});
+</script>
+</body>
+</html>
