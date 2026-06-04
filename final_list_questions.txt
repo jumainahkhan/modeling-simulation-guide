@@ -1,0 +1,17 @@
+How can one describe a natural or social system in view of modeling and simulation approach? How are time and space handled? Why does one need various modeling approaches? What do "boundary conditions" and "initial condition" mean?
+What is a dynamical system and how are they described? Discuss the difference of a dynamical system with continuous and with discrete time progression. Explain the concepts of fixed point, limit cycle and chaos. Give examples.
+Show how a process can be modeled as a dynamical system through a balance equation. Describe the methods used to solve a dynamical system numerically.
+What are the main quantities used to specify a graph or network? Additionally, define the adjacency, concept of small-world networks, and degree distribution.
+How can you build a graph/network with a computer? What are the different types of graphs? Propose a dynamical model of your choice on a complex network and discuss it.
+What is the lattice Boltzmann method? Explain the purpose of the method, define the method through its equations, and provide a brief explanation on how to write an algorithm for this method.
+Explain the term "Computational Fluid Dynamics". Explain how a lattice-gas and the lattice Boltzmann method are used in this context, and explain the differences between the two approaches.
+Explain the purpose of the Barnes-Hut algorithm and provide details about how the algorithm works.
+Present three inter-particle potentials (gravity, Coulomb, Lennard-Jones). Explain the algorithmic complexity of resolving the interaction between particles, and explain the possible work-arounds for each of the three potentials.
+What are agent based models? Define the different kind of agents. Define the behavior and discuss implementations. Illustrate with examples.
+Discuss about agents models spatial aspects, various topologies and neighborhoods. Detail the different approaches and their consequences. Illustrate with examples.
+Discuss the specific challenges of modeling social systems. Introduce the Schelling spatial segregation model and opinion dynamics on a complex network.
+Defined a cellular automaton (CA), both intuitively and mathematically. Explain the goal of this approach. Explain how the evolution can be computed and discuss how many CA may exist.
+What is a diffusion process? Explain the different approaches discussed in the course.
+Explain how Monte-Carlo simulations are used to sample a given probability distribution. Explain the concept of a Monte-Carlo simulations to simulate a natural process. Give simple examples.
+What are discrete events models ? Define the different elements of such models, and the differences with continuous time approach. Illustrate with examples.
+Discuss about discrete event systems implementation. After summarizing the discrete events approach, propose concrete methods to implements them efficiently.
